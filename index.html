@@ -5,117 +5,183 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Máquina de Tres Brazos</title>
   <style>
-    :root{
-      --green:#16a34a;
-      --slate:#1e293b;
-      --bg:#f1f5f9;
+    :root {
+      --green: #16a34a;
+      --slate: #1e293b;
+      --bg: #f1f5f9;
     }
-    *{box-sizing:border-box;margin:0;padding:0}
-    body{
-      font-family:system-ui,sans-serif;background:var(--bg);color:var(--slate);
-      display:flex;flex-direction:column;align-items:center;gap:1.8rem;padding:2rem;
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, sans-serif;
+      background: var(--bg);
+      color: var(--slate);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1.8rem;
+      padding: 2rem;
     }
-    h1{font-size:2.35rem;text-align:center;font-weight:700}
-    .machines{display:flex;gap:1.5rem;flex-wrap:wrap}
-    button.machine{
-      position:relative;padding:1.25rem 2.4rem;font-size:1.35rem;font-weight:600;
-      border:none;border-radius:1rem;background:#e5e7eb;color:var(--slate);
-      box-shadow:0 6px 14px rgba(0,0,0,.12);cursor:pointer;
-      transition:transform .12s,filter .12s;
+    h1 { font-size: 2.35rem; text-align: center; font-weight: 700; }
+    .machines { display: flex; gap: 1.5rem; flex-wrap: wrap; }
+    button.machine {
+      position: relative;
+      padding: 1.25rem 2.4rem;
+      font-size: 1.35rem;
+      font-weight: 600;
+      border: none;
+      border-radius: 1rem;
+      background: #e5e7eb;
+      color: var(--slate);
+      box-shadow: 0 6px 14px rgba(0, 0, 0, .12);
+      cursor: pointer;
+      transition: transform .12s, filter .12s;
     }
-    button.machine:hover{filter:brightness(.92)}button.machine:active{transform:scale(.93)}
-    button.machine:disabled{opacity:.4;cursor:not-allowed}
-    #status{font-size:1.15rem;min-height:1.6rem;text-align:center}
-    #summary{font-size:1.5rem;font-weight:700;margin-top:1.4rem;text-align:center}
-    table{margin-top:1.1rem;width:100%;max-width:480px;border-collapse:collapse;
-          background:#fff;border-radius:.6rem;overflow:hidden;
-          box-shadow:0 4px 12px rgba(0,0,0,.07)}
-    th,td{padding:.55rem .7rem;text-align:center;border-bottom:1px solid #e2e8f0;font-size:.95rem}
-    th{background:#e0e7ff;font-weight:600}
-    tr.flash{animation:flashBg 1s ease-in-out}@keyframes flashBg{0%{background:#fef08a}100%{background:transparent}}
-    #barWrap{position:relative;width:100%;max-width:480px;height:.65rem;background:#cbd5e1;
-            border-radius:1rem;overflow:hidden}
-    #bar{position:absolute;inset:0;background:var(--green);transition:width .4s}
-    .float{position:absolute;left:50%;top:0;transform:translate(-50%,0);
-           font-size:1.1rem;font-weight:700;color:var(--green);
-           pointer-events:none;animation:floatUp 1.4s forwards}
-    @keyframes floatUp{0%{opacity:0;transform:translate(-50%,0) scale(.8)}
-      20%{opacity:1;transform:translate(-50%,-10px) scale(1)}
-      100%{opacity:0;transform:translate(-50%,-60px) scale(1.05)}}
+    button.machine:hover { filter: brightness(.92); }
+    button.machine:active { transform: scale(.93); }
+    button.machine:disabled { opacity: .4; cursor: not-allowed; }
+    #status { font-size: 1.15rem; min-height: 1.6rem; text-align: center; }
+    #summary { font-size: 1.5rem; font-weight: 700; margin-top: 1.4rem; text-align: center; }
+    table {
+      margin-top: 1.1rem;
+      width: 100%;
+      max-width: 480px;
+      border-collapse: collapse;
+      background: #fff;
+      border-radius: .6rem;
+      overflow: hidden;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, .07);
+    }
+    th, td {
+      padding: .55rem .7rem;
+      text-align: center;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: .95rem;
+    }
+    th { background: #e0e7ff; font-weight: 600; }
+    tr.flash {
+      animation: flashBg 1s ease-in-out;
+    }
+    @keyframes flashBg {
+      0% { background: #fef08a; }
+      100% { background: transparent; }
+    }
+    #barWrap {
+      position: relative;
+      width: 100%;
+      max-width: 480px;
+      height: .65rem;
+      background: #cbd5e1;
+      border-radius: 1rem;
+      overflow: hidden;
+    }
+    #bar {
+      position: absolute;
+      inset: 0;
+      background: var(--green);
+      transition: width .4s;
+    }
+    .float {
+      position: absolute;
+      left: 50%;
+      top: 0;
+      transform: translate(-50%, 0);
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--green);
+      pointer-events: none;
+      animation: floatUp 1.4s forwards;
+    }
+    @keyframes floatUp {
+      0% { opacity: 0; transform: translate(-50%, 0) scale(.8); }
+      20% { opacity: 1; transform: translate(-50%, -10px) scale(1); }
+      100% { opacity: 0; transform: translate(-50%, -60px) scale(1.05); }
+    }
   </style>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.5.1/dist/confetti.browser.min.js"></script>
 </head>
 <body>
   <h1>Máquina de Tres Brazos</h1>
-
   <div id="status"></div>
-
   <div class="machines">
     <button class="machine" data-id="A">Tirar A</button>
     <button class="machine" data-id="B">Tirar B</button>
     <button class="machine" data-id="C">Tirar C</button>
   </div>
-
   <div id="barWrap"><div id="bar"></div></div>
-
   <div id="summary"></div>
-
   <table id="log" hidden>
     <thead><tr><th>#</th><th>Máquina</th><th>Pago</th><th>Balance</th></tr></thead>
     <tbody></tbody>
   </table>
-
 <script>
-/* ---------- utilidades ---------- */
-function randn(mu=0,sigma=1){
-  let u=0,v=0;while(u===0)u=Math.random();while(v===0)v=Math.random();
-  return mu+sigma*Math.sqrt(-2*Math.log(u))*Math.cos(2*Math.PI*v);
+function randn(mu = 0, sigma = 1) {
+  let u = 0, v = 0;
+  while (u === 0) u = Math.random();
+  while (v === 0) v = Math.random();
+  return mu + sigma * Math.sqrt(-2 * Math.log(u)) * Math.cos(2 * Math.PI * v);
 }
 
-/* ---------- parámetros ---------- */
-const params={A:{mean:2,std:1},B:{mean:5,std:8},C:{mean:3,std:1}};
-const MAX=15;
-let pulls=MAX, balance=0, history=[];
+const params = {
+  A: { mean: 2, std: 1 },
+  B: { mean: 5, std: 8 },
+  C: { mean: 3, std: 1 }
+};
 
-/* ---------- nodos ---------- */
-const qs=s=>document.querySelector(s);
-const status=qs('#status'), bar=qs('#bar'),
-      logBody=qs('#log tbody'), summary=qs('#summary');
-document.querySelectorAll('.machine').forEach(b=>b.onclick=evaluate);
+const MAX = 15;
+let pulls = MAX, balance = 0, history = [];
 
-/* ---------- render ---------- */
-function draw(){
-  status.textContent=`Tiros restantes: ${pulls} — Balance: $${balance.toFixed(2)}`;
-  bar.style.width=`${(MAX-pulls)/MAX*100}%`;
-}
-function addRow(h){
-  const tr=document.createElement('tr');tr.className='flash';
-  tr.innerHTML=`<td>${history.length}</td><td>${h.m}</td>
-                <td>$${h.p.toFixed(2)}</td><td>$${h.b.toFixed(2)}</td>`;
-  logBody.parentElement.hidden=false;logBody.appendChild(tr);
+const qs = s => document.querySelector(s);
+const status = qs('#status'), bar = qs('#bar'),
+      logBody = qs('#log tbody'), summary = qs('#summary');
+
+document.querySelectorAll('.machine').forEach(b => b.onclick = pull);
+
+function draw() {
+  status.textContent = `Tiros restantes: ${pulls} — Balance: $${balance.toFixed(2)}`;
+  bar.style.width = `${(MAX - pulls) / MAX * 100}%`;
 }
 
-/* ---------- lógica ---------- */
-function evaluate(ev){
-  if(pulls===0)return;
-  const id=ev.currentTarget.dataset.id, p=params[id],
-        payout=Math.max(0,randn(p.mean,p.std));
-  balance+=payout-1;           // SIEMPRE cuesta $1
-  pulls--; history.push({m:id,p:payout,b:balance});
-  float(ev.currentTarget,`$${payout.toFixed(2)}`); addRow(history[history.length-1]); draw();
-  if(pulls===0)finish();
-}
-function float(btn,txt){
-  const span=document.createElement('span');span.className='float';span.textContent=txt;
-  btn.appendChild(span);setTimeout(()=>span.remove(),1400);
-}
-function finish(){
-  summary.textContent=`Balance final: $${balance.toFixed(2)}`;
-  document.querySelectorAll('.machine').forEach(b=>b.disabled=true);
-  confetti({particleCount:120,spread:80,colors:['#16a34a','#4ade80']});
+function addRow(h) {
+  const tr = document.createElement('tr');
+  tr.className = 'flash';
+  tr.innerHTML = `<td>${history.length}</td><td>${h.m}</td>
+                  <td>$${h.p.toFixed(2)}</td><td>$${h.b.toFixed(2)}</td>`;
+  logBody.parentElement.hidden = false;
+  logBody.appendChild(tr);
 }
 
-/* ---------- inicio ---------- */
+function pull(ev) {
+  if (pulls === 0) return;
+  const id = ev.currentTarget.dataset.id;
+  const p = params[id];
+  const payout = randn(p.mean, p.std);
+  balance += payout - 1; // Siempre cuesta $1
+  pulls--;
+  history.push({ m: id, p: payout, b: balance });
+  float(ev.currentTarget, `$${payout.toFixed(2)}`);
+  addRow(history[history.length - 1]);
+  draw();
+  if (pulls === 0) finish();
+}
+
+function float(btn, txt) {
+  const span = document.createElement('span');
+  span.className = 'float';
+  span.textContent = txt;
+  btn.appendChild(span);
+  setTimeout(() => span.remove(), 1400);
+}
+
+function finish() {
+  summary.textContent = `Balance final: $${balance.toFixed(2)}`;
+  document.querySelectorAll('.machine').forEach(b => b.disabled = true);
+  confetti({
+    particleCount: 120,
+    spread: 80,
+    colors: ['#16a34a', '#4ade80']
+  });
+}
+
 draw();
 </script>
 </body>
