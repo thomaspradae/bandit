@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Three‑Armed Bandit – 15‑Pull Challenge</title>
+  <title>Three‑Armed Bandit</title>
   <!-- lightweight, tailwind‑ish vibes → all inline to stay GitHub‑Pages‑portable -->
   <style>
     :root{--blue:#2563eb;--slate:#1e293b;--bg:#f1f5f9;--rose:#f43f5e}
@@ -75,7 +75,7 @@ const modalBox=document.getElementById('modalBox');
 
 // ------- RENDER LOOP -------
 function render(){
-  statusEl.textContent=`Pulls left: ${pulls}\xa0—\xa0Bankroll: $${bank.toFixed(2)}`;
+  statusEl.textContent=`Intentos restantes: ${pulls}\xa0—\xa0Balance: $${bank.toFixed(2)}`;
   bar.style.width=`${(15-pulls)/15*100}%`;
   if(history.length) logTbl.hidden=false;
   // render newest row
